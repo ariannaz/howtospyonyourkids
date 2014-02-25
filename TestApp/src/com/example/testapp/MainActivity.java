@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 
+/** Main activity. This is the initial window that gives the user a submit form. */
 public class MainActivity extends Activity {
 	
 	protected final static String EXTRA_MESSAGE = "com.example.testapp.EXTRA_MESSAGE";

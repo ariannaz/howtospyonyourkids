@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 
+/** This probably doesn't need to be an Activity, just a normal class. */
 public class ClientActivity extends Activity {
 
 	private String serverIpAddress = "192.168.0.103";
@@ -21,11 +22,6 @@ public class ClientActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// setContentView(R.layout.client);
-
-		// serverIp = (EditText) findViewById(R.id.server_ip);
-		// connectPhones = (Button) findViewById(R.id.connect_phones);
-		// connectPhones.setOnClickListener(connectListener);
 	}
 
 	public void sendData(String s) {
