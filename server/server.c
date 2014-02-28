@@ -11,8 +11,7 @@
 #define PORT    3490
 #define MAXMSG  512
 
-int
-make_socket (uint16_t port)
+int make_socket (uint16_t port)
 {
   int sock;
   struct sockaddr_in name;
@@ -38,8 +37,7 @@ make_socket (uint16_t port)
   return sock;
 }
 
-int
-read_from_client (int filedes)
+int read_from_client (int filedes)
 {
   char buffer[MAXMSG];
   int nbytes;
@@ -63,8 +61,7 @@ read_from_client (int filedes)
     }
 }
 
-int
-main (void)
+int main (void)
 {
   extern int make_socket (uint16_t port);
   int sock;
