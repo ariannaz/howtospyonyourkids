@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings.Secure;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,7 +39,12 @@ public class DisplayMessageActivity extends Activity {
 
 		// Send data to server
 		mClient.setServerIpAddress(message);
-		mClient.sendData("0,1,2,3,4,5,6,7,8,9");
+
+		String androidId = Secure.getString(getBaseContext()
+				.getContentResolver(), Secure.ANDROID_ID);
+		String deviceIdentifier = android.os.Build.MODEL + " (" + androidId
+				+ ") connected";
+		mClient.sendData(deviceIdentifier);
 	}
 
 	/**

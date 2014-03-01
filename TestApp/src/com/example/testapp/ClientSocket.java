@@ -54,11 +54,10 @@ public class ClientSocket  {
 					PrintWriter out = new PrintWriter(new BufferedWriter(
 							new OutputStreamWriter(socket.getOutputStream())),
 							true);
-					// where you issue the commands
-					out.println(message);
-					Log.d("ClientActivity", "C: Sent.");
-
-					Log.d("ClientActivity", "vzhang debug:" + message);
+					out.print(message);
+					// Need to flush since no newline is forced
+					out.flush();
+					Log.d("ClientActivity", "C: Sent message: " + message);
 				} catch (Exception e) {
 					Log.e("ClientActivity", "S: Error", e);
 				}
