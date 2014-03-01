@@ -14,29 +14,30 @@ import android.widget.TextView;
 public class DisplayMessageActivity extends Activity {
 
 	private final static int TEXT_SIZE = 40;
-	
-	private ClientActivity mClient;
-	
+
+	private ClientSocket mClient;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		mClient = new ClientActivity();
-		
+
+		mClient = new ClientSocket();
+
 		// Receive message
 		Intent i = getIntent();
 		String message = i.getStringExtra(MainActivity.EXTRA_MESSAGE);
-		
+
 		// Create the text view
 		TextView textView = new TextView(this);
 		textView.setTextSize(TEXT_SIZE);
 		textView.setText(message);
-		
-		setContentView(R.layout.activity_display_message);
+
+		setContentView(textView);
 		// Show the Up button in the action bar.
 		setupActionBar();
-		
+
 		// Send data to server
+		mClient.setServerIpAddress(message);
 		mClient.sendData("0,1,2,3,4,5,6,7,8,9");
 	}
 

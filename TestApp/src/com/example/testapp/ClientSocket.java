@@ -6,22 +6,32 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 
-import android.app.Activity;
-import android.os.Bundle;
 import android.util.Log;
 
-/** This probably doesn't need to be an Activity, just a normal class. */
-public class ClientActivity extends Activity {
+/** Runs the client code for a socket. */
+public class ClientSocket  {
 
-	private String serverIpAddress = "192.168.0.103";
+	// Default to localhost
+	private String serverIpAddress = "127.0.0.1";
 
-	private final int SERVER_PORT = 3490;
+	private int serverPort = 3490;
 
 	private String message = "";
-
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	
+	public void setServerIpAddress(String ip) {
+		serverIpAddress = ip;
+	}
+	
+	public void setServerPort(int port) {
+		serverPort = port;
+	}
+	
+	public String getServerIpAddress() {
+		return serverIpAddress;
+	}
+	
+	public int getServerPort() {
+		return serverPort;
 	}
 
 	public void sendData(String s) {
@@ -38,7 +48,7 @@ public class ClientActivity extends Activity {
 			try {
 				InetAddress serverAddr = InetAddress.getByName(serverIpAddress);
 				Log.d("ClientActivity", "C: Connecting...");
-				Socket socket = new Socket(serverAddr, SERVER_PORT);
+				Socket socket = new Socket(serverAddr, serverPort);
 				try {
 					Log.d("ClientActivity", "C: Sending command.");
 					PrintWriter out = new PrintWriter(new BufferedWriter(
