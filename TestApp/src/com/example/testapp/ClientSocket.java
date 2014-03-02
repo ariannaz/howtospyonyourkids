@@ -1,6 +1,8 @@
 package com.example.testapp;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetAddress;
@@ -9,7 +11,7 @@ import java.net.Socket;
 import android.util.Log;
 
 /** Runs the client code for a socket. */
-public class ClientSocket  {
+public class ClientSocket {
 
 	// Default to localhost
 	private String serverIpAddress = "127.0.0.1";
@@ -17,19 +19,19 @@ public class ClientSocket  {
 	private int serverPort = 3490;
 
 	private String message = "";
-	
+
 	public void setServerIpAddress(String ip) {
 		serverIpAddress = ip;
 	}
-	
+
 	public void setServerPort(int port) {
 		serverPort = port;
 	}
-	
+
 	public String getServerIpAddress() {
 		return serverIpAddress;
 	}
-	
+
 	public int getServerPort() {
 		return serverPort;
 	}
@@ -61,6 +63,15 @@ public class ClientSocket  {
 				} catch (Exception e) {
 					Log.e("ClientActivity", "S: Error", e);
 				}
+				// wait to receive confirmation from server before closing
+				BufferedReader in = new BufferedReader(new InputStreamReader(
+						socket.getInputStream()));
+
+				String receive;
+				while ((receive = in.readLine()) != null) {
+					Log.d("ClientActivity", "echo: " + receive);
+				}
+				// close socket
 				socket.close();
 				Log.d("ClientActivity", "C: Closed.");
 			} catch (Exception e) {
