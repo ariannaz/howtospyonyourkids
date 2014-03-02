@@ -1,7 +1,7 @@
 OBJ=server
 
-$(OBJ): server.c
-	gcc server.c -o $@
+$(OBJ): server.cpp
+	$(CXX) $^ -o $@
 
 clean:
 	rm -f $(OBJ) $(OBJ).exe

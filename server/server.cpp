@@ -108,12 +108,12 @@ int main (void)
             if (i == sock)
               {
                 /* Connection request on original socket. */
-                int new;
+                int new_req;
                 size = sizeof (clientname);
-                new = accept (sock,
+                new_req = accept (sock,
                               (struct sockaddr *) &clientname,
                               &size);
-                if (new < 0)
+                if (new_req < 0)
                   {
                     perror ("accept");
                     exit (EXIT_FAILURE);
@@ -122,7 +122,7 @@ int main (void)
                          "Server: connect from host %s, port %hd.\n",
                          inet_ntoa (clientname.sin_addr),
                          ntohs (clientname.sin_port));
-                FD_SET (new, &active_fd_set);
+                FD_SET (new_req, &active_fd_set);
               }
             else
               {
