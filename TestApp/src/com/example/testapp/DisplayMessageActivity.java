@@ -14,7 +14,7 @@ import android.widget.TextView;
 /** Display activity. This activity displays a pre-defined message. */
 public class DisplayMessageActivity extends Activity {
 
-	private final static int TEXT_SIZE = 40;
+	private final static int TEXT_SIZE = 20;
 
 	private ClientSocket mClient;
 
