@@ -36,17 +36,22 @@ public class ClientSocket {
 		return serverPort;
 	}
 
-	private transient String receive = "";
+	private transient String responseMessage = "";
 
 	public String getResponse() {
-		while (receive.equals("")) {
+		final static int MAX_TRIES = 100;
+		int tries;
+		for (tries = 0; tries < MAX_TRIES && responseMessage.equals(""); tries++) {
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException e) {
 				Log.e("ClientActivity", "C: Error", e);
 			}
 		}
-		return receive;
+		if (tries >= MAX_TRIES) {
+			return "\nCould not connect";
+		}
+		return responseMessage;
 	}
 
 	public void sendData(String s) {
@@ -80,8 +85,8 @@ public class ClientSocket {
 				BufferedReader in = new BufferedReader(new InputStreamReader(
 						socket.getInputStream()));
 
-				while ((receive = in.readLine()) != null) {
-					Log.d("ClientActivity", "echo: " + receive);
+				while ((responseMessage = in.readLine()) != null) {
+					Log.d("ClientActivity", "echo: " + responseMessage);
 				}
 
 				// close socket
