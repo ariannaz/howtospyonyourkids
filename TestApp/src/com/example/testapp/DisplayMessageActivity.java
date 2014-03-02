@@ -45,6 +45,12 @@ public class DisplayMessageActivity extends Activity {
 		String deviceIdentifier = android.os.Build.MODEL + " (" + androidId
 				+ ") connected";
 		mClient.sendData(deviceIdentifier);
+		String response = mClient.getResponse();
+		
+		textView.setText(message + '\n' + response);
+		
+		// prints on the next line
+		setContentView(textView);
 	}
 
 	/**
