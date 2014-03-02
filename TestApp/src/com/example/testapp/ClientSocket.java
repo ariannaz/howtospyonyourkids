@@ -36,6 +36,19 @@ public class ClientSocket {
 		return serverPort;
 	}
 
+	private transient String receive = "";
+
+	public String getResponse() {
+		while (receive.equals("")) {
+			try {
+				Thread.sleep(50);
+			} catch (InterruptedException e) {
+				Log.e("ClientActivity", "C: Error", e);
+			}
+		}
+		return receive;
+	}
+
 	public void sendData(String s) {
 		message = s;
 		if (!serverIpAddress.equals("")) {
@@ -67,10 +80,10 @@ public class ClientSocket {
 				BufferedReader in = new BufferedReader(new InputStreamReader(
 						socket.getInputStream()));
 
-				String receive;
 				while ((receive = in.readLine()) != null) {
 					Log.d("ClientActivity", "echo: " + receive);
 				}
+
 				// close socket
 				socket.close();
 				Log.d("ClientActivity", "C: Closed.");
