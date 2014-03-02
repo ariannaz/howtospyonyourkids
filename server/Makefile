@@ -1,7 +1,7 @@
 OBJ=server
 
 $(OBJ): server.c
-	clang server.c -o $@
+	gcc server.c -o $@
 
 clean:
 	rm -f $(OBJ)
