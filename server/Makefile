@@ -4,6 +4,6 @@ $(OBJ): server.c
 	gcc server.c -o $@
 
 clean:
-	rm -f $(OBJ)
+	rm -f $(OBJ) $(OBJ).exe
 
 .PHONY: clean
