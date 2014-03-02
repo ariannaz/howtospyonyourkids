@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -37,6 +38,15 @@ int make_socket (uint16_t port)
   return sock;
 }
 
+int reply_to_client (int filedes)
+{
+  static const char confirm_msg[] = "Client confirmed\n";
+  int msg_size = strlen(confirm_msg) + 1;
+  int nbytes = write(filedes, confirm_msg, msg_size);
+  fprintf (stderr, "Server sent message: %swith nybtes successful: %d\n", confirm_msg, nbytes);
+  return nbytes >= 0;
+}
+
 int read_from_client (int filedes)
 {
   char buffer[MAXMSG];
@@ -57,13 +67,12 @@ int read_from_client (int filedes)
       /* Data read. */
       buffer[nbytes] = '\0';
       fprintf (stderr, "Server: got message: '%s'\n", buffer);
-      return 0;
+      return reply_to_client(filedes);
     }
 }
 
 int main (void)
 {
-  extern int make_socket (uint16_t port);
   int sock;
   fd_set active_fd_set, read_fd_set;
   int i;
