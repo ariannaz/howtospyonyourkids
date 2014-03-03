@@ -39,7 +39,7 @@ public class ClientSocket {
 	private transient String responseMessage = "";
 
 	public String getResponse() {
-		final int MAX_TRIES = 100;
+		final int MAX_TRIES = 40;
 		int tries;
 		for (tries = 0; tries < MAX_TRIES && responseMessage.equals(""); tries++) {
 			try {
