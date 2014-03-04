@@ -73,9 +73,13 @@ int make_socket (uint16_t port)
   return sock;
 }
 
+#define BUF_SIZE 10
+
 int reply_to_client (int filedes, unsigned int client_id)
 {
-  string confirm_msg = "Client #" + to_string(client_id) + " confirmed\n";
+  char buf[BUF_SIZE];
+  snprintf(buf, BUF_SIZE, "%u", client_id);
+  string confirm_msg = "Client #" + string(buf) + " confirmed\n";
   int msg_size = confirm_msg.length() + 1;
   int nbytes = write(filedes, confirm_msg.c_str(), msg_size);
   fprintf (stderr, "Server sent message: %swith nybtes successful: %d\n", confirm_msg.c_str(), nbytes);
@@ -145,7 +149,7 @@ int main (void)
   FD_ZERO (&active_fd_set);
   FD_SET (sock, &active_fd_set);
 
-  cerr << "Server Ready \n";
+  cerr << "Server Ready\n";
   
   while (1)
     {
