@@ -60,6 +60,10 @@ int make_socket (uint16_t port)
       exit (EXIT_FAILURE);
     }
 
+  // Reuse socket if it is in a time-out state (prevents bind: Address already in use error)
+  int optval = 1;
+  setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
+
   /* Give the socket a name. */
   name.sin_family = AF_INET;
   name.sin_port = htons (port);
@@ -139,6 +143,7 @@ int main (void)
 
   /* Create the socket and set it up to accept connections. */
   sock = make_socket (PORT);
+
   if (listen (sock, 1) < 0)
     {
       perror ("listen");
