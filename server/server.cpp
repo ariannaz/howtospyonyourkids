@@ -14,6 +14,8 @@
 #include <vector>
 #include <sstream>
 #include <unordered_map>
+#include <iostream>
+#include <string>
 
 #define PORT    3490
 #define MAXMSG  512
@@ -143,6 +145,8 @@ int main (void)
   FD_ZERO (&active_fd_set);
   FD_SET (sock, &active_fd_set);
 
+  cerr << "Server Ready \n";
+  
   while (1)
     {
       /* Block until input arrives on one or more active sockets. */
