@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
@@ -15,6 +14,7 @@
 #include <sstream>
 #include <unordered_map>
 #include <iostream>
+#include <cstdio>
 #include <string>
 
 #define PORT    3490
@@ -81,9 +81,9 @@ int make_socket (uint16_t port)
 
 int reply_to_client (int filedes, unsigned int client_id)
 {
-  char buf[BUF_SIZE];
-  snprintf(buf, BUF_SIZE, "%u", client_id);
-  string confirm_msg = "Client #" + string(buf) + " confirmed\n";
+  stringstream ss;
+  ss << "Client #" << client_id << " confirmed\n";
+  string confirm_msg = ss.str();
   int msg_size = confirm_msg.length() + 1;
   int nbytes = write(filedes, confirm_msg.c_str(), msg_size);
   fprintf (stderr, "Server sent message: %swith nybtes successful: %d\n", confirm_msg.c_str(), nbytes);
