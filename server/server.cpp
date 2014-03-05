@@ -16,6 +16,7 @@
 #include <iostream>
 #include <cstdio>
 #include <string>
+#include <cstdio>
 
 #define PORT    3490
 #define MAXMSG  512
