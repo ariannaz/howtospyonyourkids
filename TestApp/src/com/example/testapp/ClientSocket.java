@@ -86,7 +86,7 @@ public class ClientSocket {
 						socket.getInputStream()));
 
 				while ((responseMessage = in.readLine()) != null) {
-					Log.d("ClientActivity", "echo: " + responseMessage);
+					Log.d("ClientActivity", "received: " + responseMessage);
 				}
 
 				// close socket
