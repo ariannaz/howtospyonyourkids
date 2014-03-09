@@ -18,6 +18,16 @@ public class DisplayMessageActivity extends Activity {
 
 	private ClientSocket mClient;
 
+	private TextView mTextView;
+	
+	public TextView getTextView() {
+		return mTextView;
+	}
+	
+	public void refreshDisplay() {
+		setContentView(mTextView);
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -29,14 +39,14 @@ public class DisplayMessageActivity extends Activity {
 		String message = i.getStringExtra(MainActivity.EXTRA_MESSAGE);
 
 		// Create the text view
-		TextView textView = new TextView(this);
-		textView.setTextSize(TEXT_SIZE);
-		textView.setText(message);
+		mTextView = new TextView(this);
+		mTextView.setTextSize(TEXT_SIZE);
+		mTextView.setText(message);
 
-		setContentView(textView);
+		refreshDisplay();
 		// Show the Up button in the action bar.
 		setupActionBar();
-
+  
 		// Send data to server
 		mClient.setServerIpAddress(message);
 
@@ -46,13 +56,12 @@ public class DisplayMessageActivity extends Activity {
 				+ ") connected";
 		mClient.sendData(deviceIdentifier);
 		String response = mClient.getResponse();
-		
-		textView.setText(message + '\n' + response);
-		
-		// prints on the next line
-		setContentView(textView);
-	}
 
+		// prints on the next line
+		mTextView.setText(message + '\n' + response);
+		refreshDisplay();
+	}
+ 
 	/**
 	 * Set up the {@link android.app.ActionBar}, if the API is available.
 	 */
