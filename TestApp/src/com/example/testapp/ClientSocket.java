@@ -10,7 +10,7 @@ import java.net.Socket;
 
 import android.util.Log;
 
-/** Runs the client code for a socket. */
+/** Runs the client code that connects to a particular socket on the server. */
 public class ClientSocket {
 
 	// Default to localhost
