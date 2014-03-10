@@ -78,15 +78,17 @@ public class ClientSocket {
 					// Need to flush since no newline is forced
 					out.flush();
 					Log.d("ClientActivity", "C: Sent message: " + message);
+
+					// wait to receive confirmation from server before closing
+					BufferedReader in = new BufferedReader(
+							new InputStreamReader(socket.getInputStream()));
+
+					while ((responseMessage = in.readLine()) != null) {
+						Log.d("ClientActivity", "C: Received message: "
+								+ responseMessage);
+					}
 				} catch (Exception e) {
 					Log.e("ClientActivity", "S: Error", e);
-				}
-				// wait to receive confirmation from server before closing
-				BufferedReader in = new BufferedReader(new InputStreamReader(
-						socket.getInputStream()));
-
-				while ((responseMessage = in.readLine()) != null) {
-					Log.d("ClientActivity", "received: " + responseMessage);
 				}
 
 				// close socket

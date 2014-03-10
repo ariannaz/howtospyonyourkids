@@ -24,10 +24,6 @@ public class DisplayMessageActivity extends Activity {
 		return mTextView;
 	}
 	
-	public void refreshDisplay() {
-		setContentView(mTextView);
-	}
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -43,7 +39,7 @@ public class DisplayMessageActivity extends Activity {
 		mTextView.setTextSize(TEXT_SIZE);
 		mTextView.setText(message);
 
-		refreshDisplay();
+		setContentView(mTextView);
 		// Show the Up button in the action bar.
 		setupActionBar();
   
@@ -59,7 +55,7 @@ public class DisplayMessageActivity extends Activity {
 
 		// prints on the next line
 		mTextView.setText(message + '\n' + response);
-		refreshDisplay();
+		setContentView(mTextView);
 	}
  
 	/**
