@@ -59,6 +59,8 @@ public class ClientSocket {
 		if (!serverIpAddress.equals("")) {
 			Thread cThread = new Thread(new ClientThread());
 			cThread.start();
+		} else {
+			responseMessage = "Please enter a non-empty IP address";
 		}
 	}
 
