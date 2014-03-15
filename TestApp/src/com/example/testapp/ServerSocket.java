@@ -6,10 +6,23 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.util.ArrayList;
 import java.util.Iterator;
 
-/** Runs the server code that can service multiple connecting clients simultaneously. */
+import android.util.Log;
+
+/**
+ * Runs the server code that can service multiple connecting clients
+ * simultaneously.
+ */
 public class ServerSocket {
+	public class ByteBufferAttachment {
+		public ByteBufferAttachment() {
+			byteBuffers = new ArrayList<ByteBuffer>();
+		}
+
+		public ArrayList<ByteBuffer> byteBuffers;
+	}
 
 	public class ServerThread implements Runnable {
 		public void run() {
@@ -42,55 +55,82 @@ public class ServerSocket {
 							client.socket().setTcpNoDelay(true);
 							client.register(selector, SelectionKey.OP_READ);
 
-							System.err.println("Client connected: "
+							Log.d("ServerActivity", "S: client connected: "
 									+ client.toString());
 						}
-						ByteBuffer readBuf = ByteBuffer.allocate(bufSize);
 						if (key.isReadable()) {
 							SocketChannel client = (SocketChannel) key
 									.channel();
+							ByteBuffer readBuf = ByteBuffer.allocate(bufSize);
 							int bytes = client.read(readBuf);
 							if (bytes == -1) {
-								System.err.println("Closing client: "
+								Log.d("ServerActivity", "S: closing client: "
 										+ client.toString());
 								client.close();
 								continue;
 							}
-							System.err.println("Received message: "
-									+ new String(readBuf.array()));
+
+							// Resize to the correct size
+							ByteBuffer storeBuf = ByteBuffer.allocate(bytes);
+							for (int c = 0; c < bytes; c++) {
+								storeBuf.put(readBuf.get(c));
+							}
+
+							Log.d("ServerActivity", "S: received " + bytes
+									+ " bytes");
+							Log.d("ServerActivity", "S: received message: "
+									+ new String(storeBuf.array()));
 
 							client.register(selector, SelectionKey.OP_READ
 									| SelectionKey.OP_WRITE);
-							key.attach(readBuf);
+
+							if (key.attachment() instanceof ByteBufferAttachment) {
+								ByteBufferAttachment attachment = (ByteBufferAttachment) key
+										.attachment();
+								attachment.byteBuffers.add(storeBuf);
+								key.attach(attachment);
+							} else {
+								ByteBufferAttachment attachment = new ByteBufferAttachment();
+								attachment.byteBuffers.add(storeBuf);
+								key.attach(attachment);
+							}
 						}
 						if (key.isWritable()) {
 							SocketChannel client = (SocketChannel) key
 									.channel();
-							ByteBuffer writeBuf = (ByteBuffer) key.attachment();
-							writeBuf.flip();
-							client.write(writeBuf);
-							System.err.println("Sent message: "
-									+ new String(writeBuf.array()));
+							if (key.attachment() instanceof ByteBufferAttachment) {
+								ByteBufferAttachment attachment = (ByteBufferAttachment) key
+										.attachment();
+								for (ByteBuffer writeBuf : attachment.byteBuffers) {
+									writeBuf.flip();
+									client.write(writeBuf);
+									Log.d("ServerActivity", "S: sent message: "
+											+ new String(writeBuf.array()));
+								}
+								attachment.byteBuffers.clear();
+							} else {
+								Log.d("ServerActivity", "S: unknown attachment");
+							}
 
 							client.register(selector, SelectionKey.OP_READ);
 						}
 					}
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				Log.e("ServerActivity", "S: Error", e);
 			} finally {
 				try {
 					selector.close();
 					server.socket().close();
 					server.close();
 				} catch (Exception e) {
-					e.printStackTrace();
+					Log.e("ServerActivity", "S: Error trying to destruct", e);
 				}
 			}
 		}
 	}
 
-	public void start() {
+	public void launch() {
 		Thread cThread = new Thread(new ServerThread());
 		cThread.start();
 	}
