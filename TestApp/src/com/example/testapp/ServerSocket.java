@@ -1,13 +1,16 @@
 package com.example.testapp;
 
 import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import android.util.Log;
 
@@ -25,6 +28,28 @@ public class ServerSocket {
 	}
 
 	public class ServerThread implements Runnable {
+		// TODO: use a set instead
+		private Map<ClientDevice, ClientDevice> deviceMap = new HashMap<ClientDevice, ClientDevice>();
+
+		int registerClient(String clientString, Socket client) {
+			ClientDevice device = new ClientDevice(clientString);
+			if (!deviceMap.containsKey(device)) {
+				device.id = deviceMap.size();
+				device.ip = client.getInetAddress();
+				device.port = client.getPort();
+
+				Log.d("ServerActivity",
+						"S: registered new client device " + device.name
+								+ " with hash " + Long.toHexString(device.hash)
+								+ " with id: " + device.id);
+
+				deviceMap.put(device, device);
+			} else {
+				device = deviceMap.get(device);
+			}
+			return device.id;
+		}
+
 		public void run() {
 
 			final int port = 3490;
@@ -56,7 +81,8 @@ public class ServerSocket {
 							client.register(selector, SelectionKey.OP_READ);
 
 							Log.d("ServerActivity", "S: client connected: "
-									+ client.toString());
+									+ client.socket().getInetAddress() + " "
+									+ client.socket().getPort());
 						}
 						if (key.isReadable()) {
 							SocketChannel client = (SocketChannel) key
@@ -65,7 +91,8 @@ public class ServerSocket {
 							int bytes = client.read(readBuf);
 							if (bytes == -1) {
 								Log.d("ServerActivity", "S: closing client: "
-										+ client.toString());
+										+ client.socket().getInetAddress()
+										+ " " + client.socket().getPort());
 								client.close();
 								continue;
 							}
@@ -76,10 +103,26 @@ public class ServerSocket {
 								storeBuf.put(readBuf.get(c));
 							}
 
+							String receivedMessage = new String(
+									storeBuf.array());
+
 							Log.d("ServerActivity", "S: received " + bytes
 									+ " bytes");
 							Log.d("ServerActivity", "S: received message: "
-									+ new String(storeBuf.array()));
+									+ receivedMessage);
+
+							int id = registerClient(receivedMessage,
+									client.socket());
+
+							String replyMessage = "Client #" + id
+									+ " confirmed\n";
+
+							ByteBuffer sendBuf = ByteBuffer
+									.allocate(replyMessage.length());
+
+							for (char c : replyMessage.toCharArray()) {
+								sendBuf.put((byte) c);
+							}
 
 							client.register(selector, SelectionKey.OP_READ
 									| SelectionKey.OP_WRITE);
@@ -87,11 +130,11 @@ public class ServerSocket {
 							if (key.attachment() instanceof ByteBufferAttachment) {
 								ByteBufferAttachment attachment = (ByteBufferAttachment) key
 										.attachment();
-								attachment.byteBuffers.add(storeBuf);
+								attachment.byteBuffers.add(sendBuf);
 								key.attach(attachment);
 							} else {
 								ByteBufferAttachment attachment = new ByteBufferAttachment();
-								attachment.byteBuffers.add(storeBuf);
+								attachment.byteBuffers.add(sendBuf);
 								key.attach(attachment);
 							}
 						}
