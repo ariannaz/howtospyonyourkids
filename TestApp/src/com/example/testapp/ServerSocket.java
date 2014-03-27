@@ -28,8 +28,7 @@ public class ServerSocket {
 	}
 
 	public class ServerThread implements Runnable {
-		// TODO: use a set instead
-		private Map<ClientDevice, ClientDevice> deviceMap = new HashMap<ClientDevice, ClientDevice>();
+		private Map<ClientDevice, Integer> deviceMap = new HashMap<ClientDevice, Integer>();
 
 		int registerClient(String clientString, Socket client) {
 			ClientDevice device = new ClientDevice(clientString);
@@ -43,11 +42,11 @@ public class ServerSocket {
 								+ " with hash " + Long.toHexString(device.hash)
 								+ " with id: " + device.id);
 
-				deviceMap.put(device, device);
+				deviceMap.put(device, device.id);
+				return device.id;
 			} else {
-				device = deviceMap.get(device);
+				return deviceMap.get(device);
 			}
-			return device.id;
 		}
 
 		public void run() {
