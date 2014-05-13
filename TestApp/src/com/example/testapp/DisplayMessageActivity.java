@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.support.v4.app.NavUtils;
+import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -14,7 +15,7 @@ import android.widget.TextView;
 /** Display activity. This activity displays text to the user. */
 public class DisplayMessageActivity extends Activity {
 
-	private final static int TEXT_SIZE = 20;
+	private final static int TEXT_SIZE = 40;
 
 	private ClientSocket mClient;
 
@@ -27,7 +28,7 @@ public class DisplayMessageActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		
 		mClient = new ClientSocket();
 
 		// Receive message
@@ -38,8 +39,9 @@ public class DisplayMessageActivity extends Activity {
 		mTextView = new TextView(this);
 		mTextView.setTextSize(TEXT_SIZE);
 		mTextView.setText(message);
-
+		mTextView.setMovementMethod(new ScrollingMovementMethod());
 		setContentView(mTextView);
+		
 		// Show the Up button in the action bar.
 		setupActionBar();
 
