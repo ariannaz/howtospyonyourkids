@@ -3,6 +3,7 @@ package com.example.testapp;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
@@ -40,6 +41,8 @@ public class DisplayMessageActivity extends Activity {
 		mTextView.setTextSize(TEXT_SIZE);
 		mTextView.setText(message);
 		mTextView.setMovementMethod(new ScrollingMovementMethod());
+		mTextView.setBackgroundColor(Color.BLACK);
+		mTextView.setTextColor(Color.CYAN);
 		setContentView(mTextView);
 		
 		// Show the Up button in the action bar.
