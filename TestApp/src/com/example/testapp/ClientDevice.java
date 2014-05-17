@@ -10,6 +10,14 @@ public class ClientDevice {
 	public InetAddress ip;
 	public int port;
 
+	long unsignedParseLongHex(String s) {
+		long l = 0;
+		long hi = Long.parseLong(s.substring(0, 8), 16), lo = Long.parseLong(
+				s.substring(8), 16);
+		l = (hi << 32) | lo;
+		return l;
+	}
+
 	ClientDevice(String desc) {
 		id = 0;
 		port = 0;
@@ -20,7 +28,11 @@ public class ClientDevice {
 
 		name = tokens[0];
 		String hashString = tokens[1].substring(1, tokens[1].length() - 1);
-		hash = Long.parseLong(hashString, 16);
+
+		// Long.parseLong **sucks**. It is expecting a positive number, so it
+		// doesn't work if the first character on a 16-hex is 8-f
+		// I'm doing the split into two 32-bit longs and bitwise xor.
+		hash = unsignedParseLongHex(hashString);
 	}
 
 	@Override
