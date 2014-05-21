@@ -31,7 +31,7 @@ public class ClientDevice {
 
 		// Long.parseLong **sucks**. It is expecting a positive number, so it
 		// doesn't work if the first character on a 16-hex is 8-f
-		// I'm doing the split into two 32-bit longs and bitwise xor.
+		// I'm doing the split into two 32-bit longs and bitwise or.
 		hash = unsignedParseLongHex(hashString);
 	}
 
