@@ -29,6 +29,7 @@ public class DecoratedView {
 	}
 
 	public void appendText(String msg, int colour) {
+		// TODO: ensure the hex string is 6 characters long
 		Tag t = new Tag("font", " color=\"#" + Integer.toHexString(colour)
 				+ "\"");
 		ArrayList<Tag> tags = new ArrayList<Tag>();
@@ -47,6 +48,7 @@ public class DecoratedView {
 
 	public void appendText(String msg, int colour, ArrayList<String> names) {
 		ArrayList<Tag> tags = new ArrayList<Tag>();
+		// TODO: ensure the hex string is 6 characters long
 		Tag t = new Tag("font", " color=\"#" + Integer.toHexString(colour)
 				+ "\"");
 		tags.add(t);
