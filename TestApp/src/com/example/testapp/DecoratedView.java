@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.text.Html;
 import android.widget.TextView;
 
@@ -23,7 +22,7 @@ public class DecoratedView {
 		}
 	}
 
-	private String mHtml;
+	private String mHtml = "";
 
 	public void appendText(String msg) {
 		mHtml += msg;
@@ -78,24 +77,6 @@ public class DecoratedView {
 		TextView tv = new TextView(c);
 		tv.setText(Html.fromHtml(mHtml));
 		return tv;
-	}
-
-	/**
-	 * This is a unit test-like function, so try to use this class here.
-	 * 
-	 * @param args
-	 *            unused
-	 */
-	public static void main(String[] args) {
-		DecoratedView dv = new DecoratedView();
-
-		dv.appendText("hello world");
-		dv.appendText("the sky is blue", Color.BLUE);
-		ArrayList<String> names = new ArrayList<String>();
-		names.add("strong");
-		dv.appendText("the sun is red and strong", Color.RED, names);
-
-		System.out.println(dv.getHtmlString());
 	}
 
 }
