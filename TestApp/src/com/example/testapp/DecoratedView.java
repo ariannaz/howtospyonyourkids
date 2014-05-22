@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.Html;
 import android.widget.TextView;
 
@@ -29,8 +30,7 @@ public class DecoratedView {
 	}
 
 	public void appendText(String msg, int colour) {
-		// TODO: ensure the hex string is 6 characters long
-		Tag t = new Tag("font", " color=\"#" + Integer.toHexString(colour)
+		Tag t = new Tag("font", " color=\"#" + String.format("%06x", colour)
 				+ "\"");
 		ArrayList<Tag> tags = new ArrayList<Tag>();
 		tags.add(t);
@@ -48,8 +48,7 @@ public class DecoratedView {
 
 	public void appendText(String msg, int colour, ArrayList<String> names) {
 		ArrayList<Tag> tags = new ArrayList<Tag>();
-		// TODO: ensure the hex string is 6 characters long
-		Tag t = new Tag("font", " color=\"#" + Integer.toHexString(colour)
+		Tag t = new Tag("font", " color=\"#" + String.format("%06x", colour)
 				+ "\"");
 		tags.add(t);
 		for (String s : names) {
@@ -81,4 +80,22 @@ public class DecoratedView {
 		return tv;
 	}
 
+	/**
+	 * This is an example of how to use this class, although this code may not
+	 * run in an Android environment.
+	 *
+	 * @param args
+	 *            unused
+	 */
+	public static void main(String[] args) {
+		DecoratedView dv = new DecoratedView();
+
+		dv.appendText("hello world");
+		dv.appendText("the sky is blue", (Color.BLUE));
+		ArrayList<String> names = new ArrayList<String>();
+		names.add("strong");
+		dv.appendText("the sun is red and strong", Color.RED, names);
+
+		System.out.println(dv.getHtmlString());
+	}
 }
