@@ -25,6 +25,10 @@ public class DecoratedView {
 
 	private String mHtml = "";
 
+	/**
+	 * Note: the message is not escaped, so the caller must escape it. Not
+	 * escaping allows the user to create their own tags manually.
+	 */
 	public void appendText(String msg) {
 		mHtml += msg;
 	}
@@ -83,7 +87,7 @@ public class DecoratedView {
 	/**
 	 * This is an example of how to use this class, although this code may not
 	 * run in an Android environment.
-	 *
+	 * 
 	 * @param args
 	 *            unused
 	 */

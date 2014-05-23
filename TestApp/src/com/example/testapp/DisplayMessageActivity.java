@@ -8,13 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.support.v4.app.NavUtils;
-import android.test.suitebuilder.annotation.Suppress;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
-import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -32,19 +26,6 @@ public class DisplayMessageActivity extends Activity {
 		return mTextView;
 	}
 
-	// testing whether this works...
-	@Suppress
-	private void fontcolor(String text, int color) {
-		Spannable raw = new SpannableString(mTextView.getText());
-		int index = TextUtils.indexOf(raw, text);
-		while (index >= 0) {
-			raw.setSpan(new ForegroundColorSpan(color), index,
-					index + text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-			index = TextUtils.indexOf(raw, text, index + text.length());
-		}
-		mTextView.setText(raw);
-	}
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -55,19 +36,17 @@ public class DisplayMessageActivity extends Activity {
 		Intent i = getIntent();
 		String message = i.getStringExtra(MainActivity.EXTRA_MESSAGE);
 
-		// Create the text view
-		mTextView = new TextView(this);
-		mTextView.setTextSize(TEXT_SIZE);
+		DecoratedView dv = new DecoratedView();
+		dv.appendText("Message: ", Color.GREEN);
+		dv.appendText(message, Color.CYAN);
 
-		// fontcolor("msg:",Color.GREEN);
-		mTextView.setText("msg:");
-		mTextView.setTextColor(Color.GREEN);
-		mTextView.setText(message);
+		// Create the text view
+		mTextView = dv.getTextView(this);
+		mTextView.setTextSize(TEXT_SIZE);
 
 		// Make it look prettier
 		mTextView.setMovementMethod(new ScrollingMovementMethod());
 		mTextView.setBackgroundColor(Color.BLACK);
-		mTextView.setTextColor(Color.CYAN);
 		setContentView(mTextView);
 
 		// Show the Up button in the action bar.
