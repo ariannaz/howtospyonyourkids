@@ -1,5 +1,7 @@
 package com.example.testapp;
 
+import java.util.ArrayList;
+
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
@@ -36,19 +38,6 @@ public class DisplayMessageActivity extends Activity {
 		Intent i = getIntent();
 		String message = i.getStringExtra(MainActivity.EXTRA_MESSAGE);
 
-		DecoratedView dv = new DecoratedView();
-		dv.appendText("Message: ", Color.GREEN);
-		dv.appendText(message, Color.CYAN);
-
-		// Create the text view
-		mTextView = dv.getTextView(this);
-		mTextView.setTextSize(TEXT_SIZE);
-
-		// Make it look prettier
-		mTextView.setMovementMethod(new ScrollingMovementMethod());
-		mTextView.setBackgroundColor(Color.BLACK);
-		setContentView(mTextView);
-
 		// Show the Up button in the action bar.
 		setupActionBar();
 
@@ -62,8 +51,19 @@ public class DisplayMessageActivity extends Activity {
 		mClient.sendData(deviceIdentifier);
 		String response = mClient.getResponse();
 
-		// prints on the next line
-		mTextView.setText(message + '\n' + response);
+		DecoratedView dv = new DecoratedView();
+		ArrayList<String> tags = new ArrayList<String>();
+		tags.add("em");
+		dv.appendText("Message: ", tags);
+		dv.appendText(message + '\n' + response);
+		mTextView = dv.getTextView(this);
+
+		// Make it look prettier
+		mTextView.setTextSize(TEXT_SIZE);
+		mTextView.setTextColor(Color.CYAN);
+		mTextView.setMovementMethod(new ScrollingMovementMethod());
+		mTextView.setBackgroundColor(Color.BLACK);
+		
 		setContentView(mTextView);
 	}
 

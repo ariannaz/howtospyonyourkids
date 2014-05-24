@@ -21,6 +21,10 @@ public class DecoratedView {
 			name = _name;
 			attributes = _attributes;
 		}
+
+		public Tag(String _name) {
+			this(_name, "");
+		}
 	}
 
 	private String mHtml = "";
@@ -45,7 +49,7 @@ public class DecoratedView {
 	public void appendText(String msg, ArrayList<String> names) {
 		ArrayList<Tag> tags = new ArrayList<Tag>();
 		for (String s : names) {
-			tags.add(new Tag(s, ""));
+			tags.add(new Tag(s));
 		}
 		appendTextInternal(msg, tags);
 	}
@@ -56,7 +60,7 @@ public class DecoratedView {
 				+ "\"");
 		tags.add(t);
 		for (String s : names) {
-			tags.add(new Tag(s, ""));
+			tags.add(new Tag(s));
 		}
 		appendTextInternal(msg, tags);
 	}
@@ -75,12 +79,12 @@ public class DecoratedView {
 	}
 
 	public String getHtmlString() {
-		return mHtml;
+		return "<p>" + mHtml + "</p>";
 	}
 
 	public TextView getTextView(Context c) {
 		TextView tv = new TextView(c);
-		tv.setText(Html.fromHtml(mHtml));
+		tv.setText(Html.fromHtml(getHtmlString()));
 		return tv;
 	}
 
