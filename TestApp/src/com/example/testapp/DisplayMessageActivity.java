@@ -61,6 +61,7 @@ public class DisplayMessageActivity extends Activity {
 		tv.setText(decoratedTextView.getText());
 		tv.setTextSize(TEXT_SIZE);
 		tv.setTextColor(Color.CYAN);
+		tv.setBackgroundColor(Color.BLACK);
 		tv.setMovementMethod(new ScrollingMovementMethod());
 	}
 
@@ -106,7 +107,7 @@ public class DisplayMessageActivity extends Activity {
 		String response = mClient.getResponse();
 		Log.d("DisplayMessageActivity", "Command received: " + response);
 		TextView tv = (TextView) findViewById(R.id.display_message);
-		tv.setText(response);
+		tv.setText(tv.getText() + "\nSlave replied: " + response);
 	}
 
 }
