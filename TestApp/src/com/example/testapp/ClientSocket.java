@@ -51,7 +51,9 @@ public class ClientSocket {
 		if (tries >= MAX_TRIES) {
 			return "\nCould not connect";
 		}
-		return responseMessage;
+		String responseCopy = responseMessage;
+		responseMessage = "";
+		return responseCopy;
 	}
 
 	public void sendData(String s) {

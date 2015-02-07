@@ -11,22 +11,19 @@ import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.support.v4.app.NavUtils;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 /** Display activity. This activity displays text to the user. */
 public class DisplayMessageActivity extends Activity {
 
-	private final static int TEXT_SIZE = 40;
+	private final static int TEXT_SIZE = 20;
 
 	private ClientSocket mClient;
-
-	private TextView mTextView;
-
-	public TextView getTextView() {
-		return mTextView;
-	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,15 +53,15 @@ public class DisplayMessageActivity extends Activity {
 		tags.add("em");
 		dv.appendText("Message: ", tags);
 		dv.appendText(message + '\n' + response);
-		mTextView = dv.getTextView(this);
+		TextView decoratedTextView = dv.getTextView(this);
 
 		// Make it look prettier
-		mTextView.setTextSize(TEXT_SIZE);
-		mTextView.setTextColor(Color.CYAN);
-		mTextView.setMovementMethod(new ScrollingMovementMethod());
-		mTextView.setBackgroundColor(Color.BLACK);
-		
-		setContentView(mTextView);
+		setContentView(R.layout.activity_display_message);
+		TextView tv = (TextView) findViewById(R.id.display_message);
+		tv.setText(decoratedTextView.getText());
+		tv.setTextSize(TEXT_SIZE);
+		tv.setTextColor(Color.CYAN);
+		tv.setMovementMethod(new ScrollingMovementMethod());
 	}
 
 	/**
@@ -98,6 +95,18 @@ public class DisplayMessageActivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	public void sendMessage(View view) {
+		// Allow sending custom text to server
+		EditText cmdText = (EditText) findViewById(R.id.cmd_message);
+		String cmdString = cmdText.getText().toString();
+		Log.d("DisplayMessageActivity", "Command read: " + cmdString);
+		mClient.sendData(ServerSocket.CMD_PREFIX + cmdString);
+		String response = mClient.getResponse();
+		Log.d("DisplayMessageActivity", "Command received: " + response);
+		TextView tv = (TextView) findViewById(R.id.display_message);
+		tv.setText(response);
 	}
 
 }

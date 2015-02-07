@@ -22,6 +22,8 @@
 
 using namespace std;
 
+static char CMD_CHAR = '/';
+
 typedef struct {
   unsigned int id;
   unsigned long long hash;
@@ -110,6 +112,15 @@ int read_from_client (int filedes, const struct sockaddr_in clientname, unordere
       /* Data read. */
       buffer[nbytes] = '\0';
       fprintf (stderr, "Server: got message: '%s'\n", buffer);
+      // Check for commands
+      if (nbytes > 0 && buffer[0] == CMD_CHAR)
+        {
+          string msg = string("Sorry, I cannot ") + &buffer[1] + '\n';
+          int nbytes = write(filedes, msg.c_str(), msg.length() + 1);
+          fprintf (stderr, "Server sent message: %swith nybtes successful: %d\n", msg.c_str(), nbytes);
+          return nbytes >= 0;
+        }
+      // Else, check for 
       unsigned int client_id = get_client_id(buffer, client_hash_to_id);
       if (client_id >= client_devices.size())
         {

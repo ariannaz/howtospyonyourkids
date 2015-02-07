@@ -19,6 +19,9 @@ import android.util.Log;
  * simultaneously.
  */
 public class ServerSocket {
+
+	public final static String CMD_PREFIX = "/";
+
 	public class ByteBufferAttachment {
 		public ByteBufferAttachment() {
 			byteBuffers = new ArrayList<ByteBuffer>();
@@ -110,11 +113,19 @@ public class ServerSocket {
 							Log.d("ServerActivity", "S: received message: "
 									+ receivedMessage);
 
-							int id = registerClient(receivedMessage,
-									client.socket());
+							String replyMessage;
 
-							String replyMessage = "Client #" + id
-									+ " confirmed\n";
+							if (receivedMessage.startsWith(CMD_PREFIX)) {
+								replyMessage = "Sorry, I cannot "
+										+ receivedMessage.substring(CMD_PREFIX
+												.length());
+							} else {
+
+								int id = registerClient(receivedMessage,
+										client.socket());
+
+								replyMessage = "Client #" + id + " confirmed\n";
+							}
 
 							ByteBuffer sendBuf = ByteBuffer
 									.allocate(replyMessage.length());
