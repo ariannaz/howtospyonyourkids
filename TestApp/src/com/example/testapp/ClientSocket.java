@@ -83,13 +83,15 @@ public class ClientSocket {
 					out.flush();
 					Log.d("ClientActivity", "C: Sent message: " + message);
 
-					// wait to receive confirmation from server before closing
+					// Wait to receive confirmation from server before closing
 					BufferedReader in = new BufferedReader(
 							new InputStreamReader(socket.getInputStream()));
 
+					// Can only send one-line messages
 					while ((responseMessage = in.readLine()) != null) {
 						Log.d("ClientActivity", "C: Received message: "
 								+ responseMessage);
+						break;
 					}
 				} catch (Exception e) {
 					Log.e("ClientActivity", "S: Error", e);
