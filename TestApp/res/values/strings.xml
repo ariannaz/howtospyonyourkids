@@ -6,6 +6,7 @@
     <string name="display_message">Displayed Message</string>
     <string name="edit_message">Enter IP Address to connect to</string>
     <string name="cmd_message">Master, please provide instructions</string>
+    <string name="text_scroll_id">Text scroll ID</string>
     <string name="button_send">Submit</string>
     <string name="title_activity_display_message">DisplayMessageActivity</string>
 

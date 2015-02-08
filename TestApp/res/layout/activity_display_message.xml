@@ -10,6 +10,7 @@
     tools:context=".DisplayMessageActivity" >
 
     <ScrollView
+        android:id="@+id/text_scroll_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
 

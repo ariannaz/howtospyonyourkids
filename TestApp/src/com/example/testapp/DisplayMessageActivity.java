@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 /** Display activity. This activity displays text to the user. */
@@ -24,6 +25,8 @@ public class DisplayMessageActivity extends Activity {
 	private final static int TEXT_SIZE = 20;
 
 	private ClientSocket mClient;
+	private TextView mTextView;
+	private ScrollView mScrollView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +60,13 @@ public class DisplayMessageActivity extends Activity {
 
 		// Make it look prettier
 		setContentView(R.layout.activity_display_message);
-		TextView tv = (TextView) findViewById(R.id.display_message);
-		tv.setText(decoratedTextView.getText());
-		tv.setTextSize(TEXT_SIZE);
-		tv.setTextColor(Color.CYAN);
-		tv.setBackgroundColor(Color.BLACK);
-		tv.setMovementMethod(new ScrollingMovementMethod());
+		mTextView = (TextView) findViewById(R.id.display_message);
+		mScrollView = (ScrollView) findViewById(R.id.text_scroll_id);
+		mTextView.setText(decoratedTextView.getText());
+		mTextView.setTextSize(TEXT_SIZE);
+		mTextView.setTextColor(Color.CYAN);
+		mTextView.setBackgroundColor(Color.BLACK);
+		mTextView.setMovementMethod(new ScrollingMovementMethod());
 	}
 
 	/**
@@ -106,8 +110,13 @@ public class DisplayMessageActivity extends Activity {
 		mClient.sendData(ServerSocket.CMD_PREFIX + cmdString);
 		String response = mClient.getResponse();
 		Log.d("DisplayMessageActivity", "Command received: " + response);
-		TextView tv = (TextView) findViewById(R.id.display_message);
-		tv.setText(tv.getText() + "\nSlave replied: " + response);
-	}
+		mTextView.setText(mTextView.getText() + "\nSlave replied: " + response);
 
+		// Scroll to the bottom
+		mScrollView.post(new Runnable() {
+			public void run() {
+				mScrollView.fullScroll(View.FOCUS_DOWN);
+			}
+		});
+	}
 }
