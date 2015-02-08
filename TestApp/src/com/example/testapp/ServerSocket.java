@@ -118,7 +118,7 @@ public class ServerSocket {
 							if (receivedMessage.startsWith(CMD_PREFIX)) {
 								replyMessage = "Sorry, I cannot "
 										+ receivedMessage.substring(CMD_PREFIX
-												.length());
+												.length()) + '\n';
 							} else {
 
 								int id = registerClient(receivedMessage,
